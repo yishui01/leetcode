@@ -5,7 +5,12 @@
  *     struct ListNode *next;
  * };
  */
-
+/*
+这题目很坑的地方是不能直接把两个数组成int然后相加再放到链表，
+因为它测试用例会输入很大的数字，超过int，甚至unsigned int，这就很尴尬，
+解决方案是一位一位的加，每次加完直接存到结果链表（要记录是否进位），
+php写多了这种溢出全忘记了，哈哈哈哈，要好好补回来
+**/
 struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
     int v1 = 0, v2 = 0, i = 0, j = 0;
     int num = 0; //迭代变量
