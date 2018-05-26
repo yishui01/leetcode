@@ -1,5 +1,5 @@
 char* convert(char* s, int numRows) {
-    //一行一行来，Z字形的每个整列都是等差数列，单列也和整列有等差关系
+    //一行一行来，Z字形的每个整列都是等差数列，整列与整列之间的单列也和整列有等差关系
     int i,j, diff, len, currenIndex; //diff为每个整列之间的差值
     len = strlen(s);
     if(len <= numRows || numRows == 1) return s;
@@ -9,8 +9,7 @@ char* convert(char* s, int numRows) {
     for (i =0; i < numRows; i++) {
         currenIndex = i;
         while (currenIndex< len) {
-            if(currenIndex < len) {
-                //先把整列的加了
+                   //先把整列的加了
                     res[j] = s[currenIndex];
                     j++;
                     if(i > 0 && i < numRows - 1) {
@@ -22,8 +21,6 @@ char* convert(char* s, int numRows) {
                             j++;
                         }
                     }
-            }
-
             currenIndex += diff;
         }
 
