@@ -1,91 +1,33 @@
 bool isMatch(char* s, char* p) {
-    char star;
-    int isstar = 0, isspot = 0, i = 0, j = 0, bt = 0; //bt为*的差值
-    bool res = true;
-    while(*(s+i))
-    {  
-        
-        if(*(p+j) == '*'){
-          isstar = 1; 
-          star = *(p+j-1);
-        }
-        
-          printf("j是%d--重复字符是--%c--s是--%c\n", j,star, *(s+i));
-        if(*(s+i) != *(p+j)){
-         res = false;
-         if(*(p+j) == '.'){
-             res = true;
-         }else{
-            if(*(p+j) == '*' ){
-                if(star == '.'){
-                    //之前的是个点
-                    res = true;
-                }else if(*(p+j+bt) == *(s+i) ||  *(p+j+bt) == '.'){
-                     printf("抵消重复\n ");
-                 res = true;
-                 j+=bt;
-                 isstar = 0;
-                 star = ' ';
-                }else{
-                    printf("靠重复\n");
-                    //之前的不是个点
-                    if(star == *(s+i)){
-                        res = true;
-                    }else{
-                        res = false;
-                    }
-                }
-            }else{
-                if(*(p+j+1) == '*'){
-                    res = true;
-                    j++;
-                    i--;
-                }else{
-                    return false; 
-                }
-               
-            }
-         }
-        }
+    int slen = 0, plen = 0;
+    slen = strlen(s);
+    plen = strlen(p);
+    if (slen == 0 && plen == 0) return true;
+    if(plen == 1 && slen==1 && (*p == *s || *p == '.'))return true;
+    //接下来是p表达式的长达大于等于2的情况,先判断第二个字符是不是*号
+    if(*(p+1) == '*'){
+            //下面这个循环是用于抵消掉s中被*匹配的字符
+             while(*s  && (s[0] == p[0] || p[0] == '.')){
+             if(isMatch(s, p+2))return true; //如果s和p的*之后的字符串匹配，代表这个*和*前的字符组合是没什么卵用的，直接返回true即可;
+             s+=1; //如果不匹配，代表这个*和*前的字符有点用，至少重复了一次以上，所以此时的*s处于被*抵消的范围内，于是将s前进到下一个字符，直到超出*的范围。
+          }
       
-        if(!res){
-            return false;
-        }
-        
-     
-
-        
-        if(isstar == 0 || (star != *(s+i) && star != '.')){
-            j++;
-            isstar = 0;
-            star = ' ';
-            bt = 0;
-        }else{
-            bt++;
-        }
-        
-        
-        i++;
-    }
-    
-    if(strlen(s) < strlen(p)){
-         while(*(p+j+bt)){
-        if(*(p+j+bt) == '.'){
-            res = true;
-        }else if(*(p+j+bt) == '*'){
-            if(*(p+j+bt-1)=='.'){
-                res = true;
-            }else if(*(p+j+bt-1)==*(s+i-1)){
-                res = true;
-            }
+       
+    } else {
+        //如果第二个字符不是*，就先比较第一个字符是否相等，不相等直接false，相等就将s和p各加1，进行下一次递归，为什么不在这里比较第二个字符，因为
+        //第二个字符可能被第三个*字符抵消，比如"ab*"匹配"a", 第二个字符b是可以被第三个*重复0次抵消的，所以不能直接比较，要放到下一次递归。
+        //这里有个坑，'.'和''是不等的，所以要加个判断s长度是否为空
+        if(slen!=0 && (*p == *s || *p == '.')){
+            return isMatch(s+1, p+1);
         }else{
             return false;
         }
-
-            j++;
-        }
     }
     
+    //到这里来的都是从那个while循环跳出来的，此时s已经脱离了*的抵消范围，此时将p的指针前进两位，进行下一次递归判断。
     
-    return res;
+    return isMatch(s, p+2);
+    
+
+    
 }
