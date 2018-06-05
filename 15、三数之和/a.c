@@ -19,8 +19,8 @@ int** threeSum(int* nums, int numsSize, int* returnSize) {
             }
         }
     }
-    for(i = 0; i<numsSize-2; i++) {
-        //遍历到倒数第三个的时候就停止
+    for(i = 0; i<numsSize-2; i++) {//遍历到倒数第三个的时候就停止
+        //排序后如果目标数都大于0了就break，因为后面的数肯定也是大于0的
         if(nums[i] > 0)break;
         left = i + 1;
         right = numsSize - 1;
